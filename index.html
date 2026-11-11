@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0820">
+  <title>LumeKids — Jardim de Luz</title>
+  <meta name="description" content="Um joguinho aconchegante para pequenos exploradores. Guie a Lumi, colete sementes de luz e faça o jardim florescer.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g' cx='38%25' cy='32%25'%3E%3Cstop offset='0' stop-color='%23fffdf0'/%3E%3Cstop offset='1' stop-color='%23ffb648'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='52' r='34' fill='url(%23g)'/%3E%3Ccircle cx='39' cy='48' r='4' fill='%233b2a52'/%3E%3Ccircle cx='61' cy='48' r='4' fill='%233b2a52'/%3E%3Cpath d='M43 60 Q50 66 57 60' stroke='%236b4326' stroke-width='3.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="LumeKids — início">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Lume<span>Kids</span></span>
+    </a>
+    <span class="topbar-chip">Jardim de Luz</span>
+    <button class="icon-btn topbar-help" id="helpBtn" type="button" aria-label="Como jogar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 18.2v.1M9.2 9.1a2.9 2.9 0 1 1 4.3 2.6c-.9.5-1.5 1.1-1.5 2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".45"/></svg>
+    </button>
+  </header>
+
+  <main class="stage-wrap">
+    <div class="stage" id="stage">
+      <canvas id="game" aria-label="Jardim de luz interativo. Mova o mouse, arraste o dedo ou use as setas para guiar a Lumi."></canvas>
+
+      <div class="hud" id="hud">
+        <div class="hud-left">
+          <div class="chip light-chip" id="lightChip">
+            <svg class="chip-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.4" fill="currentColor"/>
+              <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".85">
+                <path d="M12 2.4v2.1M12 19.5v2.1M2.4 12h2.1M19.5 12h2.1M5.2 5.2l1.5 1.5M17.3 17.3l1.5 1.5M18.8 5.2l-1.5 1.5M6.7 17.3l-1.5 1.5"/>
+              </g>
+            </svg>
+            <span class="meter" role="progressbar" aria-label="Luz da lanterna" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="lightMeter">
+              <span class="meter-fill" id="lightFill"></span>
+            </span>
+          </div>
+          <div class="level-tag" id="levelTag">Fase 1 · O primeiro brilho</div>
+        </div>
+
+        <div class="chip seed-chip" aria-label="Sementes coletadas">
+          <svg class="chip-icon seed-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="5.6" fill="currentColor"/>
+            <path d="M12 1.6v3.2M12 19.2v3.2M1.6 12h3.2M19.2 12h3.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity=".7"/>
+          </svg>
+          <span class="seed-numbers"><b id="seedCount">0</b><span class="seed-total" id="seedTotal">/ 8</span></span>
+        </div>
+
+        <div class="hud-right">
+          <div class="chip score-chip" aria-label="Pontos">
+            <svg class="chip-icon star-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1-5.4-3-5.4 3 1.1-6.1L3.2 9.6l6.1-.8z" fill="currentColor"/></svg>
+            <b id="scoreVal">0</b>
+          </div>
+          <button class="icon-btn" id="muteBtn" type="button" aria-label="Desligar som" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-on">
+              <path d="M4.5 9.5h3L12 5.6v12.8L7.5 14.5h-3z" fill="currentColor"/>
+              <path d="M15.4 8.6a4.8 4.8 0 0 1 0 6.8M18.1 6a8.4 8.4 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-off">
+              <path d="M4.5 9.5h3L12 5.6v12.8L7.5 14.5h-3z" fill="currentColor"/>
+              <path d="M16 9.5l5 5M21 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button class="icon-btn" id="pauseBtn" type="button" aria-label="Pausar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5.5" width="3.4" height="13" rx="1.7" fill="currentColor"/><rect x="13.6" y="5.5" width="3.4" height="13" rx="1.7" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="combo" id="combo" aria-live="polite"></div>
+      <div class="overlay" id="overlay"></div>
+    </div>
+
+    <div class="rotate-hint" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.8" width="10" height="18.4" rx="2.6"/><path d="M10.6 18.4h2.8"/><path d="M3.2 9.4a6.6 6.6 0 0 1 1.4-2.3M20.8 14.6a6.6 6.6 0 0 1-1.4 2.3"/><path d="M2.8 6.4l.4 3 3-.4M21.2 17.6l-.4-3-3 .4"/></svg>
+      <span>Vire o celular para um jardim maior</span>
+    </div>
+
+    <div class="underbar">
+      <span class="under-hint"><span class="dot-hint" aria-hidden="true"></span> Arraste, mova o mouse ou use as setas</span>
+      <span class="under-credit">Feito com carinho para pequenos exploradores</span>
+    </div>
+  </main>
+
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
